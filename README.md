@@ -291,7 +291,6 @@ npm install
 - [ ] **Custom Metrics**: User-defined performance measurements
 - [ ] **Batch Processing**: Queue multiple benchmark jobs
 - [ ] **Model Comparison**: Side-by-side detailed comparisons
-- ~~ **Docker Support**: Containerized deployment options~~
 - [ ] **Cloud Integration**: Support for cloud-based LLM services
 
 ## 🐛 Troubleshooting
