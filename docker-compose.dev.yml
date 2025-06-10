@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: llm-benchmark-backend-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://ollama:11434}
+      - ENVIRONMENT=development
+    volumes:
+      # Mount source code for hot reloading
+      - ./backend:/app
+      - /app/__pycache__  # Exclude cache
+    networks:
+      - llm-benchmark-network
+    command: ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    depends_on:
+      - ollama
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: llm-benchmark-frontend-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true  # For hot reloading in Docker
+      - WATCHPACK_POLLING=true
+    volumes:
+      # Mount source code for hot reloading
+      - ./frontend:/app
+      - /app/node_modules  # Exclude node_modules
+    networks:
+      - llm-benchmark-network
+    command: ["npm", "start"]
+    depends_on:
+      - backend
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: llm-benchmark-ollama-dev
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-dev-data:/root/.ollama
+    networks:
+      - llm-benchmark-network
+    # Uncomment for GPU support (NVIDIA)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  ollama-dev-data:
+    driver: local
+
+networks:
+  llm-benchmark-network:
+    driver: bridge

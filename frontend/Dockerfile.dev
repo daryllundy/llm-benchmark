@@ -1,0 +1,35 @@
+# Frontend Development Dockerfile
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables for development
+ENV NODE_ENV=development \
+    CHOKIDAR_USEPOLLING=true \
+    WATCHPACK_POLLING=true
+
+# Install dependencies for development
+RUN apk add --no-cache \
+    git \
+    bash
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm install
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S reactjs -u 1001 -G nodejs
+
+# Change ownership of the app directory
+RUN chown -R reactjs:nodejs /app
+USER reactjs
+
+# Expose port
+EXPOSE 3000
+
+# Default command (can be overridden in docker-compose)
+CMD ["npm", "start"]
