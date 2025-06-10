@@ -11,6 +11,7 @@ A comprehensive benchmarking tool for Large Language Models (LLMs) running local
 ## ✨ Features
 
 ### 🖥️ Command Line Interface
+
 - **Performance Metrics**: Measure tokens per second for prompt evaluation, response generation, and total throughput
 - **Multiple Models**: Test all available Ollama models or select specific ones
 - **Custom Prompts**: Use default prompts or provide your own test cases
@@ -18,6 +19,7 @@ A comprehensive benchmarking tool for Large Language Models (LLMs) running local
 - **Flexible Configuration**: Skip models, adjust verbosity, and customize test parameters
 
 ### 🌐 Web Interface
+
 - **Real-time Monitoring**: Live progress tracking with visual progress bars
 - **Interactive Charts**: Beautiful visualizations using Recharts for performance comparison
 - **Model Management**: Easy selection and deselection of models to test
@@ -38,19 +40,20 @@ A comprehensive benchmarking tool for Large Language Models (LLMs) running local
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/daryllundy/llm-benchmark.git
    cd llm-benchmark
    ```
-
 2. **Start Ollama** (if not already running)
+
    ```bash
    ollama serve
    ```
-
 3. **Choose your interface:**
 
    **Option A: Command Line Only**
+
    ```bash
    uv venv
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -59,6 +62,7 @@ A comprehensive benchmarking tool for Large Language Models (LLMs) running local
    ```
 
    **Option B: Full Stack Web Application**
+
    ```bash
    # Backend setup
    cd backend
@@ -72,7 +76,6 @@ A comprehensive benchmarking tool for Large Language Models (LLMs) running local
    npm install
    npm start
    ```
-
 4. **Access the web interface** at `http://localhost:3000`
 
 ## 📊 Usage Examples
@@ -120,6 +123,7 @@ curl http://localhost:8000/health
 ## 📈 Sample Output
 
 ### Command Line Results
+
 ```
 Evaluating models: ['llama3:latest', 'dolphin-mistral:latest', 'everythinglm:latest']
 
@@ -141,6 +145,7 @@ Average stats:
 ```
 
 ### Web Interface Features
+
 - **Interactive Charts**: Bar charts comparing tokens/second across models
 - **Real-time Progress**: Live updates during benchmark execution
 - **Detailed Tables**: Comprehensive performance metrics
@@ -150,6 +155,7 @@ Average stats:
 ## 🏗️ Architecture
 
 ### Project Structure
+
 ```
 llm-benchmark/
 ├── benchmark.py              # Original CLI tool
@@ -170,6 +176,7 @@ llm-benchmark/
 ```
 
 ### Technology Stack
+
 - **Backend**: FastAPI, Python, Pydantic, Uvicorn
 - **Frontend**: React, Recharts, Modern CSS
 - **LLM Engine**: Ollama
@@ -179,18 +186,19 @@ llm-benchmark/
 
 ### Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/models` | List available Ollama models |
-| `POST` | `/benchmark` | Start a new benchmark |
-| `GET` | `/benchmark/{id}` | Get benchmark results |
-| `GET` | `/benchmarks` | List all benchmarks |
-| `DELETE` | `/benchmark/{id}` | Delete benchmark results |
-| `GET` | `/health` | Health check and Ollama status |
+| Method     | Endpoint            | Description                    |
+| ---------- | ------------------- | ------------------------------ |
+| `GET`    | `/models`         | List available Ollama models   |
+| `POST`   | `/benchmark`      | Start a new benchmark          |
+| `GET`    | `/benchmark/{id}` | Get benchmark results          |
+| `GET`    | `/benchmarks`     | List all benchmarks            |
+| `DELETE` | `/benchmark/{id}` | Delete benchmark results       |
+| `GET`    | `/health`         | Health check and Ollama status |
 
 ### Request/Response Examples
 
 **Start Benchmark**
+
 ```json
 POST /benchmark
 {
@@ -207,6 +215,7 @@ Response:
 ```
 
 **Get Results**
+
 ```json
 GET /benchmark/{id}
 {
@@ -230,16 +239,17 @@ GET /benchmark/{id}
 ## 🎯 Performance Tips
 
 1. **Model Optimization**
+
    - Use quantized models for better performance
    - Start with smaller models for initial testing
    - Consider GPU acceleration for faster inference
-
 2. **System Requirements**
+
    - Ensure sufficient RAM (8GB+ recommended)
    - SSD storage for faster model loading
    - GPU with adequate VRAM for larger models
-
 3. **Benchmarking Best Practices**
+
    - Use consistent prompts across tests
    - Allow models to warm up before formal benchmarking
    - Test multiple prompt lengths for comprehensive results
@@ -281,7 +291,7 @@ npm install
 - [ ] **Custom Metrics**: User-defined performance measurements
 - [ ] **Batch Processing**: Queue multiple benchmark jobs
 - [ ] **Model Comparison**: Side-by-side detailed comparisons
-- [ ] **Docker Support**: Containerized deployment options
+- ~~ **Docker Support**: Containerized deployment options~~
 - [ ] **Cloud Integration**: Support for cloud-based LLM services
 
 ## 🐛 Troubleshooting
@@ -289,6 +299,7 @@ npm install
 ### Common Issues
 
 **Ollama Connection Issues**
+
 ```bash
 # Check if Ollama is running
 ollama list
@@ -298,15 +309,18 @@ ollama serve
 ```
 
 **Port Conflicts**
+
 - Backend runs on port 8000
 - Frontend runs on port 3000
 - Modify ports in configuration files if needed
 
 **CORS Issues**
+
 - Ensure backend CORS settings allow frontend origin
 - Check browser console for detailed error messages
 
 **Dependencies**
+
 ```bash
 # Clear and reinstall Python packages
 uv pip freeze | uv pip uninstall -r /dev/stdin
