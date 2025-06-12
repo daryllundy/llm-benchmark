@@ -25,6 +25,8 @@ class Message(BaseModel):
 class OllamaResponse(BaseModel):
     """
     Represents the response from an Ollama model, including timing and token statistics.
+    Note that token counts may not always be accurate due to prompt caching issues.
+    For more information, see https://github.com/ollama/ollama/issues/2068.
     """
     model: str
     created_at: datetime
@@ -59,7 +61,7 @@ def run_benchmark(
     Returns an OllamaResponse object with the results.
     """
 
-    last_element = None
+    ollama_response = None
 
     if verbose:
         try:
@@ -75,13 +77,13 @@ def run_benchmark(
             )
             for chunk in stream:
                 print(chunk["message"]["content"], end="", flush=True)
-                last_element = chunk
+                ollama_response = chunk
         except Exception as e:
             logger.error(f"Error during ollama.chat (streaming): {e}")
             return None
     else:
         try:
-            last_element = ollama.chat(
+            ollama_response = ollama.chat(
                 model=model_name,
                 messages=[
                     {
@@ -91,17 +93,17 @@ def run_benchmark(
                 ],
             )
         except Exception as e:
-            logger.error(f"Error during ollama.chat: {e}")
+            logger.error(f"Error during ollama.chat: {str(e)}", exc_info=True)
             return None
 
-    if not last_element:
+    if not ollama_response:
         logger.error("System Error: No response received from ollama")
         return None
 
     # with open("data/ollama/ollama_res.json", "w") as outfile:
-    #     outfile.write(json.dumps(last_element, indent=4))
+    #     outfile.write(json.dumps(ollama_response, indent=4))
 
-    return OllamaResponse.model_validate(last_element)
+    return OllamaResponse.model_validate(ollama_response)
 
 
 def nanosec_to_sec(nanosec):
